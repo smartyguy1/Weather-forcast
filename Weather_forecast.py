@@ -66,28 +66,28 @@ def wind_dir(data):
     theta = (math.pi / 180) * data['deg']
 
     # equation of straight line to plot the path of wind
-    x = np.linspace(-2, 2, 50)
-    y = x * 1 / math.tan(theta)
+    x = np.linspace(-1, 1, 50)
+    y = x*math.tan(theta)
     plt.plot(x, y, '--')
 
     # To plot X and Y axis
     plt.plot(x, np.zeros(len(x)), color='k')
     plt.plot(np.zeros(len(y)), y, color='k')
-    plt.text(3 / 2, y.max() / 10, 'East')
-    plt.text(1 / 10, y.max(), 'North')
-    plt.text(1 / 10, -1 * y.max(), 'South')
-    plt.text(-2, y.max() / 10, 'West')
+    plt.text(1, 0, 'East')
+    plt.text(0, 1, 'North')
+    plt.text(0, -1, 'South')
+    plt.text(-1, 0, 'West')
+
+    def sgn(val):
+        if x > 0 :
+            return +1
+        elif x < 0 :
+            return -1
+        else: 
+            return 0
 
     # To elaborate the direction of wind
-    if theta < (3 / 2) * math.pi and theta > math.pi:
-        arrow = [x.min(), y.min()]
-    elif theta > math.pi / 2 and theta < math.pi:
-        arrow = [x.max(), y.min()]
-    elif theta > (3 / 2) * math.pi:
-        arrow = [x.min(), y.max()]
-    else:
-        arrow = [x.max(), y.max()]
-
+    arrow = [sgn(math.cos(x)), sgn(math.sin(x))]
     # Arrow
     plt.arrow(0, 0, arrow[0], arrow[1], width=x.max() /10, color='k')
     plt.title("Wind direction chart")
