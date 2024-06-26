@@ -41,14 +41,14 @@ def weather_data(data):
 
 def describe_data(wdata, tdata):
     if wdata['visibility'] < 10000:
-        wtext_advice = 'It might not be a bad idea to stay at home today...'
+        wtext_advice = 'It might not be a bad idea to stay at home today...\n'
     else:
-        wtext_advice = "That's Pretty Clear. How about going on a walk?"
+        wtext_advice = "That's Pretty Clear. How about going on a walk?\n"
 
     if wdata['pop'] > 0.5:
-        wtext2_advice = "Make sure to carry an ambrella if you're going out."
+        wtext2_advice = "Make sure to carry an ambrella if you're going out.\n"
     else:
-        wtext2_advice = "There shouldn't be any rain, unless something makes Indra angry again!"
+        wtext2_advice = "There shouldn't be any rain, unless something makes Indra angry again!\n"
 
     wtext1 = str(
         wdata['description'] + '\n' + 'visibility is upto ' + str(wdata['visibility']) + ' meters\t' + 'Humidity is ' +
@@ -66,10 +66,8 @@ def wind_dir(data):
     theta = (math.pi / 180) * data['deg']
 
     # equation of straight line to plot the path of wind
-    x = np.linspace(-1, 1, 50)
-    y = x*math.tan(theta)
-    plt.plot(x, y, '--')
-
+    x = np.linspace(-1,1,50)
+    y = np.linspace(-1,1,50)
     # To plot X and Y axis
     plt.plot(x, np.zeros(len(x)), color='k')
     plt.plot(np.zeros(len(y)), y, color='k')
@@ -79,17 +77,19 @@ def wind_dir(data):
     plt.text(-1, 0, 'West')
 
     def sgn(val):
-        if x > 0 :
-            return +1
-        elif x < 0 :
+        if val > 0 :
+            return 1
+        elif val < 0 :
             return -1
         else: 
             return 0
 
     # To elaborate the direction of wind
-    arrow = [sgn(math.cos(x)), sgn(math.sin(x))]
+    a1 = sgn(math.cos(theta))
+    a2 = sgn(math.sin(theta))
+    arrow = [a1, a2]
     # Arrow
-    plt.arrow(0, 0, arrow[0], arrow[1], width=x.max() /10, color='k')
+    plt.arrow(0, 0, arrow[0], arrow[1], width=0.01, color='k')
     plt.title("Wind direction chart")
     plt.show()
 
@@ -101,28 +101,6 @@ def temp_variance(data):
     plt.show()
 
 
-#To ellaborate the temperture gap between maximum, minimum and the current temperature
-def temp_distribution(temp):
-    maxima = temp.values[3] - temp.values[0]
-    minima = abs(temp.values[2] - temp.values[0])
-    x = np.linspace(0, 2 * math.pi, 100)
-
-    y = []
-    
-    for i in x:
-        if i > math.pi:
-            amp = minima
-        else:
-            amp = maxima
-
-        y.append(amp * math.sin(i))
-    plt.plot(x, np.zeros(len(x)))
-    plt.plot(x, y)
-    plt.yticks(list([float(max(y)), float(min(y))]), [str(temp.values[3]) + '(max)', str(temp.values[2]) + '(min)'])
-    plt.text(0,0,'Current temperature(' + str(temp.values[0]) +')')
-    plt.grid()
-    plt.title("Temperature distribution")
-    plt.show()
 
 
 loop = True
@@ -143,7 +121,7 @@ while loop:
     print(texta.title() + '\n' + textb.title())
     print('')
     print(text1.title(),'\n', text2.title())
-
+    input("Press enter to continue...")
     temp_variance(temp_data)
-    temp_distribution(temp_data)
+    input("Press enter again to view wind data...")
     wind_dir(wind_data)
